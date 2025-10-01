@@ -106,3 +106,10 @@ agregamos el canvas
 Se agregó a app.js una operación pública drawBlueprint(author, planName) que, usando getBlueprintsByNameAndAuthor de apimock.js, obtiene los puntos de un plano específico y dibuja sus segmentos consecutivos en el canvas HTML5; además, actualiza o crea dinámicamente un campo en el DOM que muestra el nombre del plano que se está dibujando.
 
 ![alt text](/Back/img/media/image16.png)
+
+
+### 10
+
+Verificamos que dibuje 
+
+![alt text](/Back/img/media/image17.png)

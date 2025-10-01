@@ -1,54 +1,93 @@
-// src/main/resources/static/js/app.js
 const BlueprintsModule = (function() {
     // Estado privado
     let selectedAuthor = '';
     let blueprints = [];
 
-    // Función privada para actualizar la vista desde el listado transformado
+    // Actualiza la tabla y agrega botones "Dibujar"
     function updateViewFromList(transformedList) {
         const tbody = $('#blueprints-table tbody');
-        tbody.empty(); // vaciar tabla
+        tbody.empty();
 
-        // Agregar filas con jQuery
-        transformedList.map(bp => {
-            const row = `<tr><td>${bp.name}</td><td>${bp.points}</td></tr>`;
+        transformedList.forEach(bp => {
+            const row = $('<tr></tr>');
+            row.append(`<td>${bp.name}</td>`);
+            row.append(`<td>${bp.points}</td>`);
+
+            // Botón Dibujar
+            const btn = $('<button class="btn btn-success btn-sm">Dibujar</button>');
+            btn.click(() => drawBlueprint(selectedAuthor, bp.name));
+            row.append($('<td></td>').append(btn));
+
             tbody.append(row);
         });
 
-        // Calcular total de puntos con reduce
         const totalPoints = transformedList.reduce((sum, bp) => sum + bp.points, 0);
         $('#total-points').text(totalPoints);
+
+        // Guardar en estado privado
+        blueprints = transformedList;
     }
 
-    // Función pública: cambiar autor
+    // Dibuja plano en canvas
+    function drawBlueprint(author, planName) {
+        BlueprintsMockModule.getBlueprintsByNameAndAuthor(author, planName, function(blueprint) {
+            if (!blueprint || !blueprint.points) return;
+
+            // Crear o actualizar campo del plano actual
+            let planField = $('#current-plan');
+            if (planField.length === 0) {
+                $('<div class="mb-3"><strong>Plano dibujado: </strong><span id="current-plan"></span></div>')
+                    .insertBefore('#blueprints-canvas');
+                planField = $('#current-plan');
+            }
+            planField.text(blueprint.name);
+
+            // Canvas
+            const canvas = document.getElementById('blueprints-canvas');
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const points = blueprint.points;
+            if (points.length === 0) return;
+
+            ctx.beginPath();
+            ctx.moveTo(points[0].x, points[0].y);
+            for (let i = 1; i < points.length; i++) {
+                ctx.lineTo(points[i].x, points[i].y);
+            }
+            ctx.strokeStyle = 'blue';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+        });
+    }
+
+    // Cambiar autor
     function setAuthor(author) {
         selectedAuthor = author.trim();
     }
 
-    // Función pública: actualizar listado desde apimock
+    // Actualizar listado desde apimock
     function updateBlueprintsByAuthor(author) {
         selectedAuthor = author.trim();
 
-        // Llamada al módulo apimock con callback
         BlueprintsMockModule.getBlueprintsByAuthor(selectedAuthor, function(blueprintsList) {
-            // Primer map: obtener {name, points}
             const transformed = blueprintsList.map(bp => ({
                 name: bp.name,
                 points: bp.points.length
             }));
-
-            // Segundo map: actualizar tabla con jQuery
             updateViewFromList(transformed);
-
-            // Guardar en estado privado si quieres usarlo luego
-            blueprints = transformed;
         });
+    }
+
+    // Devuelve listado de planos
+    function getBlueprints() {
+        return blueprints;
     }
 
     return {
         setAuthor,
-        updateBlueprintsByAuthor
+        updateBlueprintsByAuthor,
+        drawBlueprint,
+        getBlueprints
     };
 })();
-
-
