@@ -38,3 +38,12 @@ verificamos que la pagina sea accesible
 No aparece error 404 en la consola del navegador indicando que las librerías de JavaScript se cargaron correctamente
 
 ![alt text](/Back/img/media/image6.png)
+
+
+### Front-End - Lógica
+
+#### 1
+
+creaamos un Módulo JavaScript que, a manera de controlador, mantenga los estados y ofrece las operaciones requeridas por la vista.
+
+![alt text](/Back/img/media/image7.png)
