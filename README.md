@@ -94,4 +94,8 @@ Verificamos el funcionamiento
 
 ### 8
 
-“Get Blueprints” ya tiene asociado el click que llama a BlueprintsModule.updateBlueprintsByAuthor(author) y actualiza la tabla y el total de puntos.
+agregamos el canvas
+
+![alt text](/Back/img/media/image14.png)
+
+![alt text](/Back/img/media/image15.png)
