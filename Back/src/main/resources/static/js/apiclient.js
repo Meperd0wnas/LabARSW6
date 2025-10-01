@@ -9,7 +9,7 @@ const BlueprintsApiClient = (function() {
         selectedAuthor = author.trim();
     }
 
-    // Actualiza la tabla y los campos de la vista
+    // Actualiza la tabla y los campos de la vista (opcional, solo si quieres render desde aquí)
     function updateView() {
         document.getElementById('selected-author').textContent = selectedAuthor;
 
@@ -42,11 +42,16 @@ const BlueprintsApiClient = (function() {
             });
     }
 
-    // Devuelve la lista de planos vía callback
+    // Devuelve la lista de planos vía callback (simula la función del mock)
     function getBlueprintsByAuthor(author, callback) {
         $.get(`/blueprints/${encodeURIComponent(author)}`)
             .done(function(data) {
-                callback(data);
+                // Convertimos a la misma estructura que usa el mock {name, points}
+                const transformed = data.map(bp => ({
+                    name: bp.name,
+                    points: bp.points
+                }));
+                callback(transformed);
             })
             .fail(function(err) {
                 console.error('Error al obtener planos del autor:', err);

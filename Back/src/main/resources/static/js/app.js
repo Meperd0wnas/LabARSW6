@@ -1,9 +1,18 @@
 const BlueprintsModule = (function() {
+
+    // Backend activo (puede cambiarse dinámicamente)
+    let Backend = BlueprintsMockModule;  // Inicialmente Mock
+
     // Estado privado
     let selectedAuthor = '';
     let blueprints = [];
 
-    // Actualiza la tabla y agrega botones "Dibujar"
+    // Cambiar backend
+    function setBackend(newBackend) {
+        Backend = newBackend;
+    }
+
+    // Actualizar tabla desde lista transformada
     function updateViewFromList(transformedList) {
         const tbody = $('#blueprints-table tbody');
         tbody.empty();
@@ -23,17 +32,20 @@ const BlueprintsModule = (function() {
 
         const totalPoints = transformedList.reduce((sum, bp) => sum + bp.points, 0);
         $('#total-points').text(totalPoints);
-
-        // Guardar en estado privado
-        blueprints = transformedList;
     }
 
-    // Dibuja plano en canvas
+    // Dibujar plano en canvas
     function drawBlueprint(author, planName) {
-        BlueprintsMockModule.getBlueprintsByNameAndAuthor(author, planName, function(blueprint) {
+        if (!Backend.getBlueprintsByAuthor) {
+            console.error('El backend no tiene getBlueprintsByAuthor');
+            return;
+        }
+
+        Backend.getBlueprintsByAuthor(author, function(list) {
+            const blueprint = list.find(bp => bp.name === planName);
             if (!blueprint || !blueprint.points) return;
 
-            // Crear o actualizar campo del plano actual
+            // Campo plano actual
             let planField = $('#current-plan');
             if (planField.length === 0) {
                 $('<div class="mb-3"><strong>Plano dibujado: </strong><span id="current-plan"></span></div>')
@@ -47,10 +59,9 @@ const BlueprintsModule = (function() {
             const ctx = canvas.getContext('2d');
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            const points = blueprint.points;
-            if (points.length === 0) return;
-
+            // Dibujar líneas entre puntos
             ctx.beginPath();
+            const points = blueprint.points;
             ctx.moveTo(points[0].x, points[0].y);
             for (let i = 1; i < points.length; i++) {
                 ctx.lineTo(points[i].x, points[i].y);
@@ -66,20 +77,20 @@ const BlueprintsModule = (function() {
         selectedAuthor = author.trim();
     }
 
-    // Actualizar listado desde apimock
+    // Actualizar listado de planos
     function updateBlueprintsByAuthor(author) {
         selectedAuthor = author.trim();
-
-        BlueprintsMockModule.getBlueprintsByAuthor(selectedAuthor, function(blueprintsList) {
-            const transformed = blueprintsList.map(bp => ({
+        Backend.getBlueprintsByAuthor(selectedAuthor, function(list) {
+            const transformed = list.map(bp => ({
                 name: bp.name,
                 points: bp.points.length
             }));
             updateViewFromList(transformed);
+            blueprints = transformed;
         });
     }
 
-    // Devuelve listado de planos
+    // Obtener planos actuales
     function getBlueprints() {
         return blueprints;
     }
@@ -88,6 +99,7 @@ const BlueprintsModule = (function() {
         setAuthor,
         updateBlueprintsByAuthor,
         drawBlueprint,
-        getBlueprints
+        getBlueprints,
+        setBackend
     };
 })();

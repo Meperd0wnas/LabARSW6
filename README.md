@@ -120,3 +120,10 @@ Verificamos que dibuje
 creamos el modulo apiclient
 
 ![alt text](/Back/img/media/image18.png)
+
+
+### 13 
+
+agregamos los botones para alternar entre el mock y el API real
+
+![alt text](/Back/img/media/image19.png)
