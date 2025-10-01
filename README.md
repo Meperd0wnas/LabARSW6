@@ -108,8 +108,15 @@ Se agregó a app.js una operación pública drawBlueprint(author, planName) que,
 ![alt text](/Back/img/media/image16.png)
 
 
-### 10
+### 10 y 11 
 
 Verificamos que dibuje 
 
 ![alt text](/Back/img/media/image17.png)
+
+
+### 12
+
+creamos el modulo apiclient
+
+![alt text](/Back/img/media/image18.png)
