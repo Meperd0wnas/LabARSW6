@@ -90,3 +90,8 @@ implementamos dentro de index.html
 Verificamos el funcionamiento
 
 ![alt text](/Back/img/media/image13.png)
+
+
+### 8
+
+“Get Blueprints” ya tiene asociado el click que llama a BlueprintsModule.updateBlueprintsByAuthor(author) y actualiza la tabla y el total de puntos.
