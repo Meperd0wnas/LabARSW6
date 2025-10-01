@@ -1,80 +1,72 @@
 // src/main/resources/static/js/app.js
 const BlueprintsModule = (function() {
-    // Estado interno
+    // Estado privado
     let selectedAuthor = '';
-    let blueprints = [];
+    let blueprints = []; // Lista de objetos { name: "nombre plano", points: cantidad de puntos }
     let totalPoints = 0;
 
-    // Función privada para calcular total de puntos (cantidad de puntos por plano)
+    // Función privada para calcular total de puntos
     function calculateTotalPoints() {
-        totalPoints = blueprints.reduce((sum, bp) => sum + bp.points.length, 0);
-    }
-
-    // Función pública: setear autor
-    function setAuthor(author) {
-        selectedAuthor = author;
-    }
-
-    // Función pública: obtener autor
-    function getAuthor() {
-        return selectedAuthor;
-    }
-
-    // Función pública: obtener lista de planos
-    function getBlueprints() {
-        return blueprints;
-    }
-
-    // Función pública: obtener total de puntos
-    function getTotalPoints() {
-        return totalPoints;
-    }
-
-    // Función pública: obtener planos desde backend (fetch)
-    async function fetchBlueprints() {
-        if (!selectedAuthor) return;
-
-        try {
-            const response = await fetch(`/blueprints/${encodeURIComponent(selectedAuthor)}`);
-            if (!response.ok) throw new Error('Error al obtener los planos');
-
-            const data = await response.json();
-            blueprints = data;
-            calculateTotalPoints();
-            updateView();
-        } catch (error) {
-            console.error(error);
-            alert('No se pudieron cargar los planos del autor.');
-            blueprints = [];
-            totalPoints = 0;
-            updateView();
-        }
+        totalPoints = blueprints.reduce((sum, bp) => sum + bp.points, 0);
     }
 
     // Función privada para actualizar la vista
     function updateView() {
-        // Autor
         document.getElementById('selected-author').textContent = selectedAuthor;
 
-        // Tabla
         const tbody = document.getElementById('blueprints-table').querySelector('tbody');
         tbody.innerHTML = '';
         blueprints.forEach(bp => {
             const row = document.createElement('tr');
-            row.innerHTML = `<td>${bp.name}</td><td>${bp.points.length}</td>`; // <-- puntos como cantidad
+            row.innerHTML = `<td>${bp.name}</td><td>${bp.points}</td>`;
             tbody.appendChild(row);
         });
 
-        // Total puntos
         document.getElementById('total-points').textContent = totalPoints;
     }
 
+    // Función privada para transformar la respuesta del fetch
+    function transformData(rawData) {
+        // Cada Blueprint -> {name, points: cantidad de puntos}
+        return rawData.map(bp => ({
+            name: bp.name,
+            points: bp.points.length
+        }));
+    }
 
+    // Función pública: cambiar autor seleccionado
+    function setAuthor(author) {
+        selectedAuthor = author.trim();
+    }
+
+    // Función pública: obtener planos del autor desde el backend
+    async function fetchBlueprints() {
+        if (!selectedAuthor) {
+            alert('Por favor seleccione un autor');
+            return;
+        }
+
+        try {
+            const response = await fetch(`/blueprints/${encodeURIComponent(selectedAuthor)}`);
+            if (!response.ok) {
+                throw new Error(`Autor no encontrado: ${selectedAuthor}`);
+            }
+            const data = await response.json();
+            blueprints = transformData(data);
+            calculateTotalPoints();
+            updateView();
+        } catch (error) {
+            blueprints = [];
+            totalPoints = 0;
+            updateView();
+            alert(error.message);
+        }
+    }
+
+    // Exposición pública
     return {
         setAuthor,
-        getAuthor,
-        getBlueprints,
-        getTotalPoints,
         fetchBlueprints
     };
 })();
+

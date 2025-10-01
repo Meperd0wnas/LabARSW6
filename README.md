@@ -61,3 +61,10 @@ creamos  un apimock con autores 'quemados' en el código.
 Agreguamos la importación de los dos nuevos módulos a la página HTML
 
 ![alt text](/Back/img/media/image9.png)
+
+
+### 4
+
+Se cambió el módulo para que mantenga de forma privada el autor seleccionado, la lista de planos con nombre y número de puntos, y el total de puntos; además, se agregaron funciones privadas para calcular el total y actualizar la vista, y se expusieron solo operaciones públicas controladas: setAuthor para cambiar el autor y fetchBlueprints para obtener los planos desde el backend.
+
+![alt text](/Back/img/media/image10.png)
