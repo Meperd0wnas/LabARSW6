@@ -2,71 +2,53 @@
 const BlueprintsModule = (function() {
     // Estado privado
     let selectedAuthor = '';
-    let blueprints = []; // Lista de objetos { name: "nombre plano", points: cantidad de puntos }
-    let totalPoints = 0;
+    let blueprints = [];
 
-    // Función privada para calcular total de puntos
-    function calculateTotalPoints() {
-        totalPoints = blueprints.reduce((sum, bp) => sum + bp.points, 0);
-    }
+    // Función privada para actualizar la vista desde el listado transformado
+    function updateViewFromList(transformedList) {
+        const tbody = $('#blueprints-table tbody');
+        tbody.empty(); // vaciar tabla
 
-    // Función privada para actualizar la vista
-    function updateView() {
-        document.getElementById('selected-author').textContent = selectedAuthor;
-
-        const tbody = document.getElementById('blueprints-table').querySelector('tbody');
-        tbody.innerHTML = '';
-        blueprints.forEach(bp => {
-            const row = document.createElement('tr');
-            row.innerHTML = `<td>${bp.name}</td><td>${bp.points}</td>`;
-            tbody.appendChild(row);
+        // Agregar filas con jQuery
+        transformedList.map(bp => {
+            const row = `<tr><td>${bp.name}</td><td>${bp.points}</td></tr>`;
+            tbody.append(row);
         });
 
-        document.getElementById('total-points').textContent = totalPoints;
+        // Calcular total de puntos con reduce
+        const totalPoints = transformedList.reduce((sum, bp) => sum + bp.points, 0);
+        $('#total-points').text(totalPoints);
     }
 
-    // Función privada para transformar la respuesta del fetch
-    function transformData(rawData) {
-        // Cada Blueprint -> {name, points: cantidad de puntos}
-        return rawData.map(bp => ({
-            name: bp.name,
-            points: bp.points.length
-        }));
-    }
-
-    // Función pública: cambiar autor seleccionado
+    // Función pública: cambiar autor
     function setAuthor(author) {
         selectedAuthor = author.trim();
     }
 
-    // Función pública: obtener planos del autor desde el backend
-    async function fetchBlueprints() {
-        if (!selectedAuthor) {
-            alert('Por favor seleccione un autor');
-            return;
-        }
+    // Función pública: actualizar listado desde apimock
+    function updateBlueprintsByAuthor(author) {
+        selectedAuthor = author.trim();
 
-        try {
-            const response = await fetch(`/blueprints/${encodeURIComponent(selectedAuthor)}`);
-            if (!response.ok) {
-                throw new Error(`Autor no encontrado: ${selectedAuthor}`);
-            }
-            const data = await response.json();
-            blueprints = transformData(data);
-            calculateTotalPoints();
-            updateView();
-        } catch (error) {
-            blueprints = [];
-            totalPoints = 0;
-            updateView();
-            alert(error.message);
-        }
+        // Llamada al módulo apimock con callback
+        BlueprintsMockModule.getBlueprintsByAuthor(selectedAuthor, function(blueprintsList) {
+            // Primer map: obtener {name, points}
+            const transformed = blueprintsList.map(bp => ({
+                name: bp.name,
+                points: bp.points.length
+            }));
+
+            // Segundo map: actualizar tabla con jQuery
+            updateViewFromList(transformed);
+
+            // Guardar en estado privado si quieres usarlo luego
+            blueprints = transformed;
+        });
     }
 
-    // Exposición pública
     return {
         setAuthor,
-        fetchBlueprints
+        updateBlueprintsByAuthor
     };
 })();
+
 

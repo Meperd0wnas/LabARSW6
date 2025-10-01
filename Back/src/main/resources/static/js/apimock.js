@@ -42,11 +42,12 @@ const BlueprintsMockModule = (function() {
         document.getElementById('total-points').textContent = totalPoints;
     }
 
-    // Funciones públicas
+    // Función pública: cambiar autor
     function setAuthor(author) {
         selectedAuthor = author.trim();
     }
 
+    // Función pública: simula fetch y actualiza tabla
     function fetchBlueprints() {
         const authorKey = selectedAuthor.toLowerCase(); // No distingue mayúsculas/minúsculas
         blueprints = mockData[authorKey] || [];
@@ -54,8 +55,16 @@ const BlueprintsMockModule = (function() {
         updateView();
     }
 
+    // NUEVO: devuelve la lista de planos del autor vía callback
+    function getBlueprintsByAuthor(author, callback) {
+        const authorKey = author.toLowerCase();
+        const list = mockData[authorKey] || [];
+        callback(list); // Entrega la lista completa al callback
+    }
+
     return {
         setAuthor,
-        fetchBlueprints
+        fetchBlueprints,
+        getBlueprintsByAuthor // <-- exportamos la nueva función pública
     };
 })();

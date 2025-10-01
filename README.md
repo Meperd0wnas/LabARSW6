@@ -68,3 +68,10 @@ Agreguamos la importación de los dos nuevos módulos a la página HTML
 Se cambió el módulo para que mantenga de forma privada el autor seleccionado, la lista de planos con nombre y número de puntos, y el total de puntos; además, se agregaron funciones privadas para calcular el total y actualizar la vista, y se expusieron solo operaciones públicas controladas: setAuthor para cambiar el autor y fetchBlueprints para obtener los planos desde el backend.
 
 ![alt text](/Back/img/media/image10.png)
+
+
+### 5
+
+puse una nueva función pública en app.js que usa apimock.js para actualizar los planos de un autor con map y reduce, y luego actualiza la tabla y el total con jQuery, tambien se agregó a apimock.js una nueva función pública getBlueprintsByAuthor(author, callback) que permite obtener la lista completa de planos de un autor mediante un callback
+
+![alt text](/Back/img/media/image11.png)
