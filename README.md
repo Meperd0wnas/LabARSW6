@@ -83,3 +83,10 @@ puse una nueva función pública en app.js que usa apimock.js para actualizar lo
 implementamos dentro de index.html
 
 ![alt text](/Back/img/media/image12.png)
+
+
+### 7
+
+Verificamos el funcionamiento
+
+![alt text](/Back/img/media/image13.png)
