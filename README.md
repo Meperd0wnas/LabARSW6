@@ -47,3 +47,17 @@ No aparece error 404 en la consola del navegador indicando que las librerías de
 creaamos un Módulo JavaScript que, a manera de controlador, mantenga los estados y ofrece las operaciones requeridas por la vista.
 
 ![alt text](/Back/img/media/image7.png)
+
+
+### 2
+
+creamos  un apimock con autores 'quemados' en el código.
+
+![alt text](/Back/img/media/image8.png)
+
+
+### 3
+
+Agreguamos la importación de los dos nuevos módulos a la página HTML
+
+![alt text](/Back/img/media/image9.png)
