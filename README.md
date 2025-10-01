@@ -4,3 +4,6 @@
 
 ### Ajustes Backend
 
+Ajustamos las dependencias en el pom 
+
+![alt text](/Back/img/media/image.png)
