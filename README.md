@@ -127,3 +127,8 @@ creamos el modulo apiclient
 agregamos los botones para alternar entre el mock y el API real
 
 ![alt text](/Back/img/media/image19.png)
+
+### 14
+
+Segun las imagenes de todo el laboratorio la pagina ya tiene lo necesario para que sea más vistosa cercana al mock dado al inicio del enunciado.
+
