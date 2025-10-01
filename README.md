@@ -28,3 +28,13 @@ creamos el directorio donde ira nuestro front
 agregamos las referencia a las librerías de jQuery, Bootstrap y a la hoja de estilos de Bootstrap.
 
 ![alt text](/Back/img/media/image4.png)
+
+#### 4
+
+verificamos que la pagina sea accesible
+
+![alt text](/Back/img/media/image5.png)
+
+No aparece error 404 en la consola del navegador indicando que las librerías de JavaScript se cargaron correctamente
+
+![alt text](/Back/img/media/image6.png)
