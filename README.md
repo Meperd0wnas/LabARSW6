@@ -75,3 +75,11 @@ Se cambió el módulo para que mantenga de forma privada el autor seleccionado, 
 puse una nueva función pública en app.js que usa apimock.js para actualizar los planos de un autor con map y reduce, y luego actualiza la tabla y el total con jQuery, tambien se agregó a apimock.js una nueva función pública getBlueprintsByAuthor(author, callback) que permite obtener la lista completa de planos de un autor mediante un callback
 
 ![alt text](/Back/img/media/image11.png)
+
+
+
+### 6 
+
+implementamos dentro de index.html
+
+![alt text](/Back/img/media/image12.png)

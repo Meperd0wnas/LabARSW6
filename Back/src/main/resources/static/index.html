@@ -59,16 +59,19 @@
 <script src="js/app.js"></script>
 
 <script>
-$('#btn-get-blueprints').click(function() {
-    const author = $('#input-author').val();
-    if (!author) {
-        alert('Por favor ingrese un autor');
-        return;
-    }
-    BlueprintsMockModule.setAuthor(author);
-    BlueprintsMockModule.fetchBlueprints();
-});
+    $(document).ready(function() {
+        $('#btn-get-blueprints').click(function() {
+            const author = $('#input-author').val();
+            if (!author) {
+                alert('Por favor ingrese un autor');
+                return;
+            }
+            // Llamar a la operación pública del módulo
+            BlueprintsModule.updateBlueprintsByAuthor(author);
+        });
+    });
 </script>
+
 
 </body>
 </html>
